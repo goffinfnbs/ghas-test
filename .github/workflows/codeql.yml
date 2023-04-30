@@ -56,6 +56,7 @@ jobs:
       DEFAULT_LANGUAGES: ${{ steps.set_defaults.outputs.DEFAULT_LANGUAGES }}
 
   scan:
+    needs: prep
     uses: './.github/workflows/scan.yml'
     with:
       RUNNER_TYPE: ${{ needs.prep.outputs.DEFAULT_RUNNER_TYPE }}
