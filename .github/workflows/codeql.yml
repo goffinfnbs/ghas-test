@@ -50,9 +50,13 @@ jobs:
         echo "DEFAULT_RUNNER_TYPE=${WD_RUNNER_TYPE:-'ubuntu-latest'}" >> $GITHUB_OUTPUT
         WD_LANGUAGES="${{ inputs.LANGUAGES }}"
         echo "DEFAULT_LANGUAGES=${WD_LANGUAGES:-'["csharp", "javascript"]'}" >> $GITHUB_OUTPUT
-        
-  scan:
-    uses: './.github/workflows/scan.yml'
-    with:
-      RUNNER_TYPE: ${{ needs.set_defaults.outputs.DEFAULT_RUNNER_TYPE }}
-      LANGUAGES: ${{ needs.set_defaults.outputs.DEFAULT_LANGUAGES }}
+    - name: scan
+      uses: './.github/workflows/scan.yml'
+      with:
+        RUNNER_TYPE: ${{ needs.set_defaults.outputs.DEFAULT_RUNNER_TYPE }}
+        LANGUAGES: ${{ needs.set_defaults.outputs.DEFAULT_LANGUAGES }}
+#  scan:
+#    uses: './.github/workflows/scan.yml'
+#    with:
+#      RUNNER_TYPE: ${{ needs.set_defaults.outputs.DEFAULT_RUNNER_TYPE }}
+#      LANGUAGES: ${{ needs.set_defaults.outputs.DEFAULT_LANGUAGES }}
