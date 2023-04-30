@@ -20,13 +20,12 @@ jobs:
       contents: read
       security-events: write
 
-    strategy:
-      fail-fast: true
-      matrix:
-        language: ${{ fromJSON(inputs.LANGUAGES) }}
+#    strategy:
+#      fail-fast: true
+#      matrix:
+#        language: ${{ fromJSON(inputs.LANGUAGES) }}
         
     steps:
-
     - name: check_inputs
       run: |
         echo "RUNNER_TYPE = ${{ inputs.RUNNER_TYPE }}"
