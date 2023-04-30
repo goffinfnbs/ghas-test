@@ -47,15 +47,22 @@ jobs:
       id: set_defaults
       run: |
         WD_RUNNER_TYPE="${{ inputs.RUNNER_TYPE }}"
-        echo "DEFAULT_RUNNER_TYPE=${WD_RUNNER_TYPE:-'ubuntu-latest'}" >> $GITHUB_OUTPUT
+        echo "DEFAULT_RUNNER_TYPE=${WD_RUNNER_TYPE:-'ubuntu-latest'}"
         WD_LANGUAGES="${{ inputs.LANGUAGES }}"
-        echo "DEFAULT_LANGUAGES=${WD_LANGUAGES:-'["csharp", "javascript"]'}" >> $GITHUB_OUTPUT
-    - name: scan
-      uses: './.github/workflows/scan.yml'
-      with:
-        RUNNER_TYPE: ${{ needs.set_defaults.outputs.DEFAULT_RUNNER_TYPE }}
-        LANGUAGES: ${{ needs.set_defaults.outputs.DEFAULT_LANGUAGES }}
-#  scan:
+        echo "DEFAULT_LANGUAGES=${WD_LANGUAGES:-'["csharp", "javascript"]'}"
+
+    outputs:
+      DEFAULT_RUNNER_TYPE: ${{ steps.set_defaults.outputs.DEFAULT_RUNNER_TYPE }}
+      DEFAULT_LANGUAGES: ${{ steps.set_defaults.outputs.DEFAULT_LANGUAGES }}
+
+  scan:
+    runs-on: 'ubuntu-latest'
+    steps:
+    - name: check_outputs
+      run: |
+        echo "RUNNER_TYPE = ${{ needs.set_defaults.outputs.DEFAULT_RUNNER_TYPE }}"
+        echo "LANGUAGES = ${{ needs.set_defaults.outputs.DEFAULT_LANGUAGES }}"
+
 #    uses: './.github/workflows/scan.yml'
 #    with:
 #      RUNNER_TYPE: ${{ needs.set_defaults.outputs.DEFAULT_RUNNER_TYPE }}
