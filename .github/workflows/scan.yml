@@ -1,4 +1,4 @@
-name: "CodeQL_Anlysis"
+name: "CodeQL_Analysis"
 
 on:
   workflow_call:
@@ -14,7 +14,8 @@ on:
 
 jobs:
   scan:
-    runs-on: ["${{ inputs.RUNNER_TYPE }}"]
+    runs-on: ["${{ github.event.inputs.RUNNER_TYPE }}"]
+#    runs-on: ["${{ inputs.RUNNER_TYPE }}"]
 #    permissions:
 #      actions: read
 #      contents: read
