@@ -51,9 +51,8 @@ jobs:
         WD_LANGUAGES="${{ inputs.LANGUAGES }}"
         echo "DEFAULT_LANGUAGES=${WD_LANGUAGES:-'["csharp", "javascript"]'}" >> $GITHUB_OUTPUT
         
-    - name: scan
-      uses: './.github/workflows/scan.yml'
-      with:
-        RUNNER_TYPE: ${{ needs.set_defaults.outputs.DEFAULT_RUNNER_TYPE }}
-        LANGUAGES: ${{ needs.set_defaults.outputs.DEFAULT_LANGUAGES }}
-#GHA_LANGUAGES=${7:-'"javascript", "csharp"'};
+  scan:
+    uses: './.github/workflows/scan.yml'
+    with:
+      RUNNER_TYPE: ${{ needs.set_defaults.outputs.DEFAULT_RUNNER_TYPE }}
+      LANGUAGES: ${{ needs.set_defaults.outputs.DEFAULT_LANGUAGES }}
