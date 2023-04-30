@@ -63,8 +63,8 @@ jobs:
       run: |
         echo "RUNNER_TYPE = ${{ needs.prep.outputs.DEFAULT_RUNNER_TYPE }}"
         echo "LANGUAGES = ${{ needs.prep.outputs.DEFAULT_LANGUAGES }}"
-
-#    uses: './.github/workflows/scan.yml'
-#    with:
-#      RUNNER_TYPE: ${{ needs.prep.outputs.DEFAULT_RUNNER_TYPE }}
-#      LANGUAGES: ${{ needs.prep.outputs.DEFAULT_LANGUAGES }}
+    - name: do_scan
+      uses: './.github/workflows/scan.yml'
+      with:
+        RUNNER_TYPE: ${{ needs.prep.outputs.DEFAULT_RUNNER_TYPE }}
+        LANGUAGES: ${{ needs.prep.outputs.DEFAULT_LANGUAGES }}
