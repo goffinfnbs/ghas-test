@@ -56,15 +56,16 @@ jobs:
       DEFAULT_LANGUAGES: ${{ steps.set_defaults.outputs.DEFAULT_LANGUAGES }}
 
   scan:
-    needs: prep
-    runs-on: 'ubuntu-latest'
-    steps:
-    - name: check_outputs
-      run: |
-        echo "RUNNER_TYPE = ${{ needs.prep.outputs.DEFAULT_RUNNER_TYPE }}"
-        echo "LANGUAGES = ${{ needs.prep.outputs.DEFAULT_LANGUAGES }}"
-    - name: do_scan
-      uses: './.github/workflows/scan.yml'
-      with:
-        RUNNER_TYPE: ${{ needs.prep.outputs.DEFAULT_RUNNER_TYPE }}
-        LANGUAGES: ${{ needs.prep.outputs.DEFAULT_LANGUAGES }}
+    uses: './.github/workflows/scan.yml'
+    with:
+      RUNNER_TYPE: ${{ needs.prep.outputs.DEFAULT_RUNNER_TYPE }}
+      LANGUAGES: ${{ needs.prep.outputs.DEFAULT_LANGUAGES }}
+
+#  debug_outputs:
+#    needs: prep
+#    runs-on: 'ubuntu-latest'
+#    steps:
+#    - name: check_outputs
+#      run: |
+#        echo "RUNNER_TYPE = ${{ needs.prep.outputs.DEFAULT_RUNNER_TYPE }}"
+#        echo "LANGUAGES = ${{ needs.prep.outputs.DEFAULT_LANGUAGES }}"
