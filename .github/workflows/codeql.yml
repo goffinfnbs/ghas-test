@@ -47,9 +47,9 @@ jobs:
       id: set_defaults
       run: |
         WD_RUNNER_TYPE="${{ inputs.RUNNER_TYPE }}"
-        echo "DEFAULT_RUNNER_TYPE=${WD_RUNNER_TYPE:-'ubuntu-latest'}"
+        echo "DEFAULT_RUNNER_TYPE=${WD_RUNNER_TYPE:-'ubuntu-latest'}" >> $GITHUB_OUTPUT
         WD_LANGUAGES="${{ inputs.LANGUAGES }}"
-        echo "DEFAULT_LANGUAGES=${WD_LANGUAGES:-'["csharp", "javascript"]'}"
+        echo "DEFAULT_LANGUAGES=${WD_LANGUAGES:-'["csharp", "javascript"]'}" >> $GITHUB_OUTPUT
 
     outputs:
       DEFAULT_RUNNER_TYPE: ${{ steps.set_defaults.outputs.DEFAULT_RUNNER_TYPE }}
