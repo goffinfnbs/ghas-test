@@ -60,6 +60,7 @@ jobs:
   scan:
     needs: prep
     uses: './.github/workflows/scan.yml'
+    secrets: inherit
     with:
       RUNNER_TYPE: ${{ needs.prep.outputs.DEFAULT_RUNNER_TYPE }}
       LANGUAGES: ${{ needs.prep.outputs.DEFAULT_LANGUAGES }}
