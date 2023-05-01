@@ -20,10 +20,10 @@ jobs:
   scan:
     name: code_scan
     runs-on: ["${{ inputs.RUNNER_TYPE }}"]
-    permissions:
-      actions: read
-      contents: read
-      security-events: write
+    #permissions:
+    #  actions: read
+    #  contents: read
+    #  security-events: write
 
 #    runs-on: ["${{ github.event.inputs.RUNNER_TYPE }}"]
 #    permissions:
