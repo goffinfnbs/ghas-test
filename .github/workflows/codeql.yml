@@ -32,68 +32,38 @@ on:
 ##    - cron: '19 23 * * 5'
 
 jobs:
-  Analyze:
-    runs-on: 'ubuntu-latest'
+  prep:
+    name: prepare_for_scan
+    runs-on: ["${{ inputs.RUNNER_TYPE }}"]
     permissions:
       actions: read
       contents: read
       security-events: write
-  
-    strategy:
-      fail-fast: false
-      matrix:
-        language: ${{ fromJSON(github.event.inputs.LANGUAGES) }}
-#        language: ${{ fromJSON(inputs.LANGUAGES) }}
-        
+#    runs-on: ["${{ github.event.inputs.RUNNER_TYPE }}"]
+
     steps:
-    - name: check_inputs
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      
+    - name: set_defaults
+      id: set_defaults
       run: |
-        echo "RUNNER_TYPE = ${{ inputs.RUNNER_TYPE }}"
-        echo "LANGUAGES = ${{ inputs.LANGUAGES }}"
-        env | grep GITHUB
-    - name: Initialize CodeQL
-      uses: github/codeql-action/init@v2
-      with:
-        languages: ${{ matrix.language }}
+        WD_RUNNER_TYPE="${{ inputs.RUNNER_TYPE }}"
+        echo "DEFAULT_RUNNER_TYPE=${WD_RUNNER_TYPE:-'ubuntu-latest'}" >> $GITHUB_OUTPUT
+        WD_LANGUAGES="${{ inputs.LANGUAGES }}"
+        echo "DEFAULT_LANGUAGES=${WD_LANGUAGES:-'["csharp", "javascript"]'}" >> $GITHUB_OUTPUT
 
-    - name: Autobuild
-      uses: github/codeql-action/autobuild@v2
+    outputs:
+      DEFAULT_RUNNER_TYPE: ${{ steps.set_defaults.outputs.DEFAULT_RUNNER_TYPE }}
+      DEFAULT_LANGUAGES: ${{ steps.set_defaults.outputs.DEFAULT_LANGUAGES }}
 
-    - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v2
-      with:
-        category: "/language:${{matrix.language}}"
+  scan:
+    needs: prep
+    uses: './.github/workflows/scan.yml'
+    with:
+      RUNNER_TYPE: ${{ needs.prep.outputs.DEFAULT_RUNNER_TYPE }}
+      LANGUAGES: ${{ needs.prep.outputs.DEFAULT_LANGUAGES }}
 
-#  prep:
-#    name: Analyze
-#    runs-on: 'ubuntu-latest'
-#    permissions:
-#      actions: read
-#      contents: read
-#      security-events: write
-#    steps:
-#    - name: Checkout repository
-#      uses: actions/checkout@v3
-#      
-#    - name: set_defaults
-#      id: set_defaults
-#      run: |
-#        WD_RUNNER_TYPE="${{ inputs.RUNNER_TYPE }}"
-#        echo "DEFAULT_RUNNER_TYPE=${WD_RUNNER_TYPE:-'ubuntu-latest'}" >> $GITHUB_OUTPUT
-#        WD_LANGUAGES="${{ inputs.LANGUAGES }}"
-#        echo "DEFAULT_LANGUAGES=${WD_LANGUAGES:-'["csharp", "javascript"]'}" >> $GITHUB_OUTPUT
-#
-#    outputs:
-#      DEFAULT_RUNNER_TYPE: ${{ steps.set_defaults.outputs.DEFAULT_RUNNER_TYPE }}
-#      DEFAULT_LANGUAGES: ${{ steps.set_defaults.outputs.DEFAULT_LANGUAGES }}
-#
-#  scan:
-#    needs: prep
-#    uses: './.github/workflows/scan.yml'
-#    with:
-#      RUNNER_TYPE: ${{ needs.prep.outputs.DEFAULT_RUNNER_TYPE }}
-#      LANGUAGES: ${{ needs.prep.outputs.DEFAULT_LANGUAGES }}
-#
 #  debug_outputs:
 #    needs: prep
 #    runs-on: 'ubuntu-latest'
@@ -102,3 +72,35 @@ jobs:
 #      run: |
 #        echo "RUNNER_TYPE = ${{ needs.prep.outputs.DEFAULT_RUNNER_TYPE }}"
 #        echo "LANGUAGES = ${{ needs.prep.outputs.DEFAULT_LANGUAGES }}"
+
+#  analyze:
+#    runs-on: 'ubuntu-latest'
+#    permissions:
+#      actions: read
+#      contents: read
+#      security-events: write
+#  
+#    strategy:
+#      fail-fast: false
+#      matrix:
+#        language: ${{ fromJSON(inputs.LANGUAGES) }}
+##       language: ${{ fromJSON(github.event.inputs.LANGUAGES) }}
+#        
+#    steps:
+#    - name: check_inputs
+#      run: |
+#        echo "RUNNER_TYPE = ${{ inputs.RUNNER_TYPE }}"
+#        echo "LANGUAGES = ${{ inputs.LANGUAGES }}"
+#        env | grep GITHUB
+#    - name: Initialize CodeQL
+#      uses: github/codeql-action/init@v2
+#      with:
+#        languages: ${{ matrix.language }}
+#
+#    - name: Autobuild
+#      uses: github/codeql-action/autobuild@v2
+#
+#    - name: Perform CodeQL Analysis
+#      uses: github/codeql-action/analyze@v2
+#      with:
+#        category: "/language:${{matrix.language}}"
