@@ -40,7 +40,7 @@ jobs:
       security-events: write
   
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         language: ${{ fromJSON(github.event.inputs.LANGUAGES) }}
 #        language: ${{ fromJSON(inputs.LANGUAGES) }}
