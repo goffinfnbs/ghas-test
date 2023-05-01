@@ -34,9 +34,9 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        language: ${{ fromJSON(inputs.LANGUAGES) }}
-#        language: ${{ fromJSON(github.event.inputs.LANGUAGES) }}
-        
+        language: ${{ fromJSON(github.event.inputs.LANGUAGES) }}
+#        language: ${{ fromJSON(inputs.LANGUAGES) }}
+
     steps:
     - name: check_inputs
       run: |
